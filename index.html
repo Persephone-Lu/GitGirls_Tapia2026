@@ -49,16 +49,6 @@
             margin-bottom: var(--spacing);
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        textarea {
-            width: 100%;
-            min-height: 120px;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            font-family: var(--font-sans);
-            font-size: 1rem;
-            resize: vertical;
-        }
         button {
             background-color: var(--accent);
             color: white;
@@ -140,14 +130,12 @@
     <div class="container">
         <header>
             <h1>Neurodivergent Friendly Study Tool</h1>
-            <p>Paste text, get an AI summary, and provide feedback.</p>
+            <p>Provide feedback on summaries.</p>
         </header>
 
         <section class="controls">
-            <h2>Input Text</h2>
-            <textarea id="originalText" placeholder="Paste or type the text you want to summarize..."></textarea>
+            <h2>Feedback Tool</h2>
             <div>
-                <button id="summarizeBtn">Generate Summary</button>
                 <button id="clearBtn" style="background-color:#6c757d;">Clear</button>
             </div>
         </section>
@@ -165,7 +153,6 @@
 
             <div class="column">
                 <h2>Feedback</h2>
-                <div id="summaryOutputFeedback" class="output"></div>
                 <div class="feedback-btns">
                     <button id="goodBtn" class="positive">Good Summary 👍</button>
                     <button id="badBtn" class="negative">Needs Improvement 👎</button>
@@ -176,72 +163,31 @@
     </div>
 
     <script>
-        const originalTextarea = document.getElementById('originalText');
         const originalOutput = document.getElementById('originalOutput');
-        const summaryOutput = document.getElementById('summaryOutput');
-        const summarizeBtn = document.getElementById('summarizeBtn');
         const clearBtn = document.getElementById('clearBtn');
         const goodBtn = document.getElementById('goodBtn');
         const badBtn = document.getElementById('badBtn');
         const feedbackStatus = document.getElementById('feedbackStatus');
 
-        // Show original text in first column as user types or on button click
-        function updateOriginalOutput() {
-            originalOutput.textContent = originalTextarea.value || '(no text yet)';
-        }
-
-        // Simulate AI summary (placeholder: just first 2 sentences or truncate)
-        function generateSummary(text) {
-            if (!text.trim()) return '';
-            // Simple naive summary: take first 120 characters
-            const trimmed = text.trim();
-            if (trimmed.length <= 150) {
-                return trimmed;
-            }
-            // Try to cut at a sentence boundary
-            const cutAt = trimmed.indexOf('.', 100);
-            if (cutAt > 0) {
-                return trimmed.substring(0, cutAt + 1);
-            }
-            return trimmed.substring(0, 150) + '...';
-        }
-
-        summarizeBtn.addEventListener('click', () => {
-            const text = originalTextarea.value;
-            updateOriginalOutput();
-            const summary = generateSummary(text);
-            summaryOutput.textContent = summary || '(no summary)';
-            // Also show summary in feedback column for reference
-            document.getElementById('summaryOutputFeedback').textContent = summary || '(no summary)';
-            feedbackStatus.textContent = '';
-        });
+        // Placeholder text for original output
+        originalOutput.textContent = '(no text yet)';
 
         clearBtn.addEventListener('click', () => {
-            originalTextarea.value = '';
             originalOutput.textContent = '(no text yet)';
-            summaryOutput.textContent = '';
-            document.getElementById('summaryOutputFeedback').textContent = '';
             feedbackStatus.textContent = '';
         });
 
         goodBtn.addEventListener('click', () => {
             feedbackStatus.textContent = 'Thanks for the feedback! 👍';
             feedbackStatus.style.color = '#28a745';
-            // Optionally store feedback
             localStorage.setItem('lastFeedback', 'good');
         });
 
         badBtn.addEventListener('click', () => {
-            feedbackStatus.textContent = 'Thanks for the feedback! We’ll improve. 👎';
+            feedbackStatus.textContent = 'Thanks for the feedback! We\'ll improve. 👎';
             feedbackStatus.style.color = '#dc3545';
             localStorage.setItem('lastFeedback', 'bad');
         });
-
-        // Live preview of original text (optional)
-        originalTextarea.addEventListener('input', updateOriginalOutput);
-
-        // Initialize
-        updateOriginalOutput();
     </script>
 </body>
 </html>
